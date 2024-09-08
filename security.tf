@@ -275,7 +275,7 @@ resource "aws_security_group_rule" "external-lb-egress-admin" {
   source_security_group_id = aws_security_group.kong.id
 }
 
-resource "aws_security_group_rule" "external-lb-egress-admin" {
+resource "aws_security_group_rule" "external-lb-egress-manager" {
   security_group_id = aws_security_group.external-lb.id
 
   type      = "egress"
