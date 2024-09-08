@@ -15,6 +15,26 @@ echo unattended-upgrades unattended-upgrades/enable_auto_updates boolean true \
     | debconf-set-selections
 dpkg-reconfigure -f noninteractive unattended-upgrades
 
+# Define ulimit values
+NOFILE_SOFT=65536
+NOFILE_HARD=65536
+NPROC_SOFT=16384
+NPROC_HARD=16384
+MEMLOCK_SOFT=unlimited
+MEMLOCK_HARD=unlimited
+CORE_SOFT=unlimited
+CORE_HARD=unlimited
+
+# Update /etc/security/limits.conf with Kong ulimits
+echo "kong soft nofile $NOFILE_SOFT" >> /etc/security/limits.conf
+echo "kong hard nofile $NOFILE_HARD" >> /etc/security/limits.conf
+echo "kong soft nproc $NPROC_SOFT" >> /etc/security/limits.conf
+echo "kong hard nproc $NPROC_HARD" >> /etc/security/limits.conf
+echo "kong soft memlock $MEMLOCK_SOFT" >> /etc/security/limits.conf
+echo "kong hard memlock $MEMLOCK_HARD" >> /etc/security/limits.conf
+echo "kong soft core $CORE_SOFT" >> /etc/security/limits.conf
+echo "kong hard core $CORE_HARD" >> /etc/security/limits.conf
+
 # Installing decK
 # https://github.com/hbagdi/deck
 curl -sL https://github.com/hbagdi/deck/releases/download/v${DECK_VERSION}/deck_${DECK_VERSION}_linux_amd64.tar.gz \
@@ -23,15 +43,12 @@ tar zxf deck.tar.gz deck
 sudo mv deck /usr/local/bin
 sudo chown root:kong /usr/local/bin/deck
 sudo chmod 755 /usr/local/bin/deck
-
 # Install Kong
 echo "Installing Kong"
 EE_LICENSE=$(aws_get_parameter ee/license)
 EE_CREDS=$(aws_get_parameter ee/bintray-auth)
 if [ "$EE_LICENSE" != "placeholder" ]; then
-    curl -sL https://kong.bintray.com/kong-enterprise-edition-deb/dists/${EE_PKG} \
-        -u $EE_CREDS \
-        -o ${EE_PKG} 
+    curl -Lo ${EE_PKG}.deb "https://packages.konghq.com/public/gateway-36/deb/ubuntu/pool/jammy/main/k/ko/${EE_PKG}/${EE_PKG}_$(dpkg --print-architecture).deb"
 
     if [ ! -f ${EE_PKG} ]; then
         echo "Error: Enterprise edition download failed, aborting."
@@ -44,10 +61,9 @@ $EE_LICENSE
 EOF
     chown root:kong /etc/kong/license.json
     chmod 640 /etc/kong/license.json
-else  
-    curl -sL "https://bintray.com/kong/kong-deb/download_file?file_path=${CE_PKG}" \
-        -o ${CE_PKG}
-    dpkg -i ${CE_PKG}
+else
+    curl -Lo ${CE_PKG}.deb "https://packages.konghq.com/public/gateway-36/deb/debian/pool/bullseye/main/k/ko/${CE_PKG}/${CE_PKG}_$(dpkg --print-architecture).deb"
+    dpkg -i ${CE_PKG}.deb
 fi
 
 # Setup database
