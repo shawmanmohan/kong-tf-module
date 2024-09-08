@@ -195,7 +195,7 @@ variable "ec2_root_volume_type" {
   description = "Type of the root volume (standard, gp2, or io)"
   type        = string
 
-  default = "gp2"
+  default = "30"
 }
 
 variable "ec2_key_name" {

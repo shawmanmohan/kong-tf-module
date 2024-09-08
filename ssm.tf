@@ -45,7 +45,7 @@ resource "aws_ssm_parameter" "ee-admin-token" {
   name  = format("/%s/%s/ee/admin/token", var.service, var.environment)
   type  = "SecureString"
   value = random_string.admin_token.result
-
+  overwrite = true
   key_id = aws_kms_alias.kong.target_key_arn
 
   lifecycle {
@@ -56,6 +56,7 @@ resource "aws_ssm_parameter" "ee-admin-token" {
 resource "aws_ssm_parameter" "db-host" {
   name = format("/%s/%s/db/host", var.service, var.environment)
   type = "String"
+  overwrite = true
   value = coalesce(
     join("", aws_db_instance.kong.*.address),
     join("", aws_rds_cluster.kong.*.endpoint),
@@ -66,6 +67,7 @@ resource "aws_ssm_parameter" "db-host" {
 resource "aws_ssm_parameter" "db-name" {
   name  = format("/%s/%s/db/name", var.service, var.environment)
   type  = "String"
+  overwrite = true
   value = replace(format("%s_%s", var.service, var.environment), "-", "_")
 }
 
