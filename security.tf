@@ -26,6 +26,17 @@ resource "aws_security_group_rule" "postgresql-ingress-kong" {
   source_security_group_id = aws_security_group.kong.id
 }
 
+resource "aws_security_group_rule" "postgresql-egress-kong" {
+  security_group_id = aws_security_group.postgresql.id
+
+  type      = "egress"
+  from_port = 0
+  to_port   = 0
+  protocol  = "-1"
+  cidr_blocks = ["0.0.0.0/0"]
+  source_security_group_id = aws_security_group.kong.id
+}
+
 resource "aws_security_group_rule" "postgresql-ingress-bastion" {
   security_group_id = aws_security_group.postgresql.id
 
@@ -259,6 +270,17 @@ resource "aws_security_group_rule" "external-lb-egress-admin" {
   type      = "egress"
   from_port = 8001
   to_port   = 8001
+  protocol  = "tcp"
+
+  source_security_group_id = aws_security_group.kong.id
+}
+
+resource "aws_security_group_rule" "external-lb-egress-admin" {
+  security_group_id = aws_security_group.external-lb.id
+
+  type      = "egress"
+  from_port = 8002
+  to_port   = 8002
   protocol  = "tcp"
 
   source_security_group_id = aws_security_group.kong.id
