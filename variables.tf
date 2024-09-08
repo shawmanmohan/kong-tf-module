@@ -181,7 +181,7 @@ variable "ec2_instance_type" {
   description = "EC2 instance type"
   type        = string
 
-  default = "t2.micro"
+  default = "t3.small"
 }
 
 variable "ec2_root_volume_size" {
@@ -412,7 +412,7 @@ variable "db_instance_class" {
   description = "Database instance class"
   type        = string
 
-  default = "db.t2.micro"
+  default = "db.t3.small"
 }
 
 variable "db_instance_count" {

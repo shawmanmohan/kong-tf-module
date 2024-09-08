@@ -196,7 +196,7 @@ Prerequisites:
 `string`</td>
 <td>
 
-`"db.t2.micro"`</td>
+`"db.t3.small"`</td>
 <td>no</td>
 </tr>
 <tr>
@@ -336,7 +336,7 @@ Prerequisites:
 `string`</td>
 <td>
 
-`"t2.micro"`</td>
+`"t3.small"`</td>
 <td>no</td>
 </tr>
 <tr>
