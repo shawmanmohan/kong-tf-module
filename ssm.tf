@@ -13,7 +13,7 @@ resource "aws_kms_key" "kong" {
 }
 
 resource "aws_kms_alias" "kong" {
-  name          = format("alias/%s-%s", var.service, var.environment)
+  name          = format("alias/%s-%s-kms", var.service, var.environment)
   target_key_id = aws_kms_key.kong.key_id
 }
 
