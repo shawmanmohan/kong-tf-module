@@ -188,14 +188,14 @@ variable "ec2_root_volume_size" {
   description = "Size of the root volume (in Gigabytes)"
   type        = string
 
-  default = 8
+  default = 30
 }
 
 variable "ec2_root_volume_type" {
   description = "Type of the root volume (standard, gp2, or io)"
   type        = string
 
-  default = "30"
+  default = "gp3"
 }
 
 variable "ec2_key_name" {
