@@ -4,7 +4,7 @@ resource "aws_lb_target_group" "external" {
 
   name     = format("%s-%s-external", var.service, var.environment)
   port     = 8000
-  protocol = "HTTP"
+  protocol = "HTTP2"
   vpc_id   = data.aws_vpc.vpc.id
 
   health_check {
@@ -72,7 +72,7 @@ resource "aws_lb_target_group" "internal" {
 
   name     = format("%s-%s-internal", var.service, var.environment)
   port     = 8000
-  protocol = "HTTP"
+  protocol = "HTTP2"
   vpc_id   = data.aws_vpc.vpc.id
 
   health_check {
@@ -100,7 +100,7 @@ resource "aws_lb_target_group" "admin" {
 
   name     = format("%s-%s-admin", var.service, var.environment)
   port     = 8001
-  protocol = "HTTP"
+  protocol = "HTTP2"
   vpc_id   = data.aws_vpc.vpc.id
 
   health_check {
@@ -128,7 +128,7 @@ resource "aws_lb_target_group" "manager" {
 
   name     = format("%s-%s-manager", var.service, var.environment)
   port     = 8002
-  protocol = "HTTP"
+  protocol = "HTTP2"
   vpc_id   = data.aws_vpc.vpc.id
 
   health_check {
@@ -156,7 +156,7 @@ resource "aws_lb_target_group" "portal-gui" {
 
   name     = format("%s-%s-porter-gui", var.service, var.environment)
   port     = 8003
-  protocol = "HTTP"
+  protocol = "HTTP2"
   vpc_id   = data.aws_vpc.vpc.id
 
   health_check {
@@ -184,7 +184,7 @@ resource "aws_lb_target_group" "portal" {
 
   name     = format("%s-%s-portal", var.service, var.environment)
   port     = 8004
-  protocol = "HTTP"
+  protocol = "HTTP2"
   vpc_id   = data.aws_vpc.vpc.id
 
   health_check {
@@ -235,7 +235,7 @@ resource "aws_lb_listener" "internal-http" {
 
   load_balancer_arn = aws_lb.internal[0].arn
   port              = 80
-  protocol          = "HTTP"
+  protocol          = "HTTP2"
 
   default_action {
     target_group_arn = aws_lb_target_group.internal[0].arn
